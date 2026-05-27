@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusBite — My Orders</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/myorders.css">
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Campus<span>Bite</span></a>
+
+  <div class="nav-actions">
+    <a href="index.html">Home</a>
+    <a href="shop.html?shop=dwarka">Order Again</a>
+  </div>
+</nav>
+
+<section class="orders-page">
+
+  <div class="orders-header">
+    <p>CampusBite Tracking</p>
+    <h1>My <span>Orders</span></h1>
+  </div>
+
+  <div id="orders-list" class="orders-list"></div>
+
+</section>
+
+<script>
+function getOrders(){
+  return JSON.parse(localStorage.getItem("campus_orders")) || [];
+}
+
+function getOrderTotal(order){
+  return order.items.reduce((sum, item) => sum + item.price * item.qty, 0) + 15;
+}
+
+function renderOrders(){
+  const orders = getOrders();
+  const list = document.getElementById("orders-list");
+
+  if(orders.length === 0){
+    list.innerHTML = `
+      <div class="empty-orders">
+        <h2>📦 No orders yet</h2>
+        <p>Your placed orders will appear here.</p>
+        <a href="index.html">Start Ordering</a>
+      </div>
+    `;
+    return;
+  }
+
+  list.innerHTML = orders.map(order => `
+    <div class="order-card">
+
+      <div class="order-top">
+        <div>
+          <p class="order-label">Order ID</p>
+          <h2>${order.id}</h2>
+        </div>
+
+        <span class="status-pill">${order.status || "Preparing"}</span>
+      </div>
+
+      <p class="order-date">${order.date}</p>
+
+      <div class="items-list">
+        ${order.items.map(item => `
+          <div class="order-item">
+            <div>
+              <h3>${item.name}</h3>
+              <p>${item.shop} • Qty ${item.qty}</p>
+            </div>
+
+            <strong>₹${item.price * item.qty}</strong>
+          </div>
+        `).join("")}
+      </div>
+
+      <div class="tracker">
+        <div class="tracker-title">Live Progress</div>
+
+        <div class="progress-line">
+          <div class="progress-fill"></div>
+        </div>
+
+        <div class="steps">
+          <span class="active">Confirmed</span>
+          <span class="active">Preparing</span>
+          <span>Ready</span>
+          <span>Picked</span>
+        </div>
+      </div>
+
+      <div class="order-bottom">
+        <span>Total Paid</span>
+        <strong>₹${getOrderTotal(order)}</strong>
+      </div>
+
+    </div>
+  `).join("");
+}
+
+renderOrders();
+</script>
+
+</body>
+</html>

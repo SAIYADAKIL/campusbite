@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusBite — Checkout</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/order.css">
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Campus<span>Bite</span></a>
+  <a href="index.html" class="back-btn">← Continue Ordering</a>
+</nav>
+
+<section class="checkout-page">
+
+  <div class="checkout-header">
+    <p>CampusBite Checkout</p>
+    <h1>Your <span>Cart</span></h1>
+  </div>
+
+  <div class="checkout-layout">
+
+    <div class="cart-list" id="cart-list"></div>
+
+    <aside class="summary-card">
+      <h2>Order Summary</h2>
+
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <strong id="subtotal">₹0</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Platform Fee</span>
+        <strong id="fee">₹10</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>GST</span>
+        <strong id="gst">₹5</strong>
+      </div>
+
+      <div class="summary-row total">
+        <span>Total</span>
+        <strong id="total">₹0</strong>
+      </div>
+
+      <button class="place-btn" onclick="placeOrder()">Place Order</button>
+      <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
+    </aside>
+
+  </div>
+
+</section>
+
+<div class="modal" id="success-modal">
+  <div class="modal-box">
+    <h2>🎉 Order Placed!</h2>
+    <p>Your food is being prepared. Pick it up from the food court counter.</p>
+    <button onclick="closeModal()">Done</button>
+  </div>
+</div>
+
+<script>
+function getCart(){
+  return JSON.parse(localStorage.getItem("campus_cart")) || [];
+}
+
+function saveCart(cart){
+  localStorage.setItem("campus_cart", JSON.stringify(cart));
+}
+
+function renderCart(){
+  const cart = getCart();
+  const list = document.getElementById("cart-list");
+
+  if(cart.length === 0){
+    list.innerHTML = `
+      <div class="empty-cart">
+        <h2>🛒 Cart is empty</h2>
+        <p>Add food from your favorite campus shop.</p>
+        <a href="index.html">Explore Shops</a>
+      </div>
+    `;
+
+    updateSummary();
+    return;
+  }
+
+  list.innerHTML = cart.map((item, index) => `
+    <div class="cart-item">
+      <div>
+        <p class="shop-name">${item.shop}</p>
+        <h3>${item.name}</h3>
+        <span>₹${item.price} × ${item.qty}</span>
+      </div>
+
+      <div class="qty-box">
+        <button onclick="changeQty(${index}, -1)">−</button>
+        <strong>${item.qty}</strong>
+        <button onclick="changeQty(${index}, 1)">+</button>
+      </div>
+
+      <div class="item-total">
+        ₹${item.price * item.qty}
+      </div>
+    </div>
+  `).join("");
+
+  updateSummary();
+}
+
+function changeQty(index, value){
+  const cart = getCart();
+
+  cart[index].qty += value;
+
+  if(cart[index].qty <= 0){
+    cart.splice(index, 1);
+  }
+
+  saveCart(cart);
+  renderCart();
+}
+
+function updateSummary(){
+  const cart = getCart();
+
+  const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const fee = cart.length ? 10 : 0;
+  const gst = cart.length ? 5 : 0;
+  const total = subtotal + fee + gst;
+
+  document.getElementById("subtotal").innerText = `₹${subtotal}`;
+  document.getElementById("fee").innerText = `₹${fee}`;
+  document.getElementById("gst").innerText = `₹${gst}`;
+  document.getElementById("total").innerText = `₹${total}`;
+}
+
+function clearCart(){
+  localStorage.removeItem("campus_cart");
+  renderCart();
+}
+
+function placeOrder(){
+  const cart = getCart();
+
+  if(cart.length === 0){
+    alert("Cart is empty!");
+    return;
+  }
+
+  const orders = JSON.parse(localStorage.getItem("campus_orders")) || [];
+
+  orders.unshift({
+    id: "CB-" + Date.now(),
+    items: cart,
+    date: new Date().toLocaleString(),
+    status: "Preparing"
+  });
+
+  localStorage.setItem("campus_orders", JSON.stringify(orders));
+  localStorage.removeItem("campus_cart");
+
+  document.getElementById("success-modal").classList.add("show");
+}
+
+function closeModal(){
+  document.getElementById("success-modal").classList.remove("show");
+  window.location.href = "myorders.html";
+}
+
+renderCart();
+</script>
+
+</body>
+</html>

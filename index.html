@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Bite — Silver Oak University</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">Campus<span>Bite</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html" >Menu</a></li>
+    
+    <li><a href="orders.html">Order</a></li>
+    <li><a href="reviews.html">Reviews</a></li>
+    <li><a href="About.html">About</a></li>
+    <li><a href="Contact.html">Contact</a></li>
+    <li><a href="Account.html">Account</a></li>
+     <li><a href="shop.html">Shops</a></li>
+  </ul>
+  <button class="cart-btn" onclick="toggleCart()">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+    </svg>
+    Cart
+    <span class="cart-count" id="cart-count">0</span>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+  </button>
+</nav>
+<section class="hero">
+
+  <!-- BACKGROUND IMAGE -->
+  <div class="hero-bg"></div>
+
+  <!-- CONTENT -->
+  <div class="hero-content">
+
+    <p class="hero-top">
+      Silver Oak University
+    </p>
+
+    <h1>
+      Eat well,<br>
+      enjoy <span>well.</span>
+    </h1>
+
+    <p class="hero-desc">
+      Fresh meals, hot snacks, cold drinks —
+      order from the canteen without leaving your spot.
+    </p>
+
+    <div class="hero-stats">
+
+      <div class="stat">
+        <h2>11</h2>
+        <p>Items today</p>
+      </div>
+
+      <div class="stat">
+        <h2>₹35</h2>
+        <p>Starts from</p>
+      </div>
+
+      <div class="stat">
+        <h2>~10</h2>
+        <p>Min ready time</p>
+      </div>
+
+    </div>
+
+    <button class="hero-btn">
+      Order Now
+    </button>
+
+  </div>
+
+  
+
+</section>
+<section class="shops-section">
+  <div class="section-title">
+    <p>Campus Food Court</p>
+    <h2>Choose Your <span>Shop</span></h2>
+  </div>
+
+  <div class="shops-grid">
+
+    <a href="shop.html?shop=petpooja" class="shop-card">
+      <img src="./assets/images/petpooja.png" alt="Pet Pooja">
+    </a>
+
+    <a href="shop.html?shop=puffholic" class="shop-card">
+      <img src  ="./assets/images/puffoholic.png" alt="Puffholic">
+    </a>
+
+    <a href="shop.html?shop=freshcrush" class="shop-card">
+      <img src="./assets/images/freshcrush.jpeg" alt="Fresh Crush">
+    </a>
+
+    <a href="shop.html?shop=dwarka" class="shop-card">
+      <img src="./assets/images/dwarkadish.jpeg" alt="Dwarka Dish">
+    </a>
+
+    <a href="shop.html?shop=sweetdelights" class="shop-card">
+      <img src="./assets/images/sweet delights.jpeg" alt="Sweet Delights">
+    </a>
+
+    <a href="shop.html?shop=umiya" class="shop-card">
+      <img src="./assets/images/umiyacampus.jpeg" alt="Umiya Campus">
+    </a>
+
+  </div>
+</section>
+<!-- HERO -->
+<!-- <div class="hero">
+  <div class="hero-tag">Silver Oak University</div>
+  <h1>Eat well,<br>enjoy <em>well.</em></h1>
+  
+  <p>Fresh meals, hot snacks, cold drinks — order from the canteen without leaving your spot.</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num" id="stat-items">—</div>
+      <div class="stat-label">Items today</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">₹35</div>
+      <div class="stat-label">Starts from</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">~10</div>
+      <div class="stat-label">Min ready time</div>
+    </div>
+  </div>
+</div> -->
+
+
+<!-- MENU SECTION -->
+<div class="section">
+  <div class="section-header">
+    <h2 class="section-title">Today's Menu</h2>
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-filter="all">chinese</button>
+      <button class="filter-btn" data-filter="meals">MOCKTAILS</button>
+      <button class="filter-btn" data-filter="snacks">SNACKS</button>
+      <button class="filter-btn" data-filter="drinks">COLDESH</button>
+      <button class="filter-btn" data-filter="veg">🟢 Veg only</button>
+    </div>
+  </div>
+  <div class="menu-grid" id="menu-grid">
+    <div class="empty-state">
+      <div class="emoji">⏳</div>
+      <p>Loading menu...</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2024 Campus Bite — Silver Oak University &nbsp;·&nbsp;
+     <a href="Contact.html">Contact</a> &nbsp;·&nbsp;
+     <a href="About.html">About</a>
+  </p>
+</footer>
+
+<!-- CART OVERLAY + DRAWER -->
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-header">
+    <span class="cart-title">Your cart</span>
+    <button class="close-btn" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items-list"></div>
+  <div class="cart-footer" id="cart-footer" style="display:none">
+    <div class="cart-summary">
+      <span class="cart-summary-label">Subtotal</span>
+      <span class="cart-summary-val" id="cart-subtotal">₹0</span>
+    </div>
+    <div class="cart-summary">
+      <span class="cart-summary-label">Ready time</span>
+      <span class="cart-summary-val">~10 mins</span>
+    </div>
+    <div class="cart-total-row">
+      <span class="cart-total-label">Total</span>
+      <span class="cart-total-val" id="cart-total">₹0</span>
+    </div>
+    <button class="order-btn" id="order-btn" onclick="placeOrder()">Place Order</button>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-bg" id="success-modal">
+  <div class="modal">
+    <div class="modal-icon">🎉</div>
+    <h2>Order placed!</h2>
+    <p>Head to the counter in ~10 minutes. Show this order ID when picking up.</p>
+    <div class="modal-id" id="order-id-display">—</div>
+    <button class="modal-close" onclick="closeModal()">Got it!</button>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+  // ─── DATA ───────────────────────────────────────────
+  // In Phase 2 this becomes: await fetch('/api/menu') or Supabase query
+  const MENU_DATA = [
+    { id:"1", name:"Veg Thali",          price:60,  category:"meals",  is_veg:true,  available:true,  emoji:"🍱" },
+    { id:"2", name:"Paneer Sandwich",    price:40,  category:"snacks", is_veg:true,  available:true,  emoji:"🥪" },
+    { id:"3", name:"Masala Chai",        price:15,  category:"drinks", is_veg:true,  available:true,  emoji:"☕" },
+    { id:"4", name:"Egg Biryani",        price:75,  category:"meals",  is_veg:false, available:true,  emoji:"🍛" },
+    { id:"5", name:"Samosa (2 pcs)",     price:20,  category:"snacks", is_veg:true,  available:true,  emoji:"🥟" },
+    { id:"6", name:"Cold Coffee",        price:35,  category:"drinks", is_veg:true,  available:true,  emoji:"🥤" },
+    { id:"7", name:"Rajma Chawal",       price:55,  category:"meals",  is_veg:true,  available:true,  emoji:"🍲" },
+    { id:"8", name:"Vada Pav",           price:20,  category:"snacks", is_veg:true,  available:true,  emoji:"🍔" },
+    { id:"9", name:"Fresh Lime Soda",    price:25,  category:"drinks", is_veg:true,  available:true,  emoji:"🍋" },
+    { id:"10",name:"Chicken Frankie",    price:55,  category:"snacks", is_veg:false, available:true,  emoji:"🌯" },
+    { id:"11",name:"Chole Bhature",      price:65,  category:"meals",  is_veg:true,  available:false, emoji:"🫓" },
+    { id:"12",name:"Lassi",              price:30,  category:"drinks", is_veg:true,  available:true,  emoji:"🥛" },
+  ];
+
+  // ─── CART STATE ──────────────────────────────────────
+  const CART_KEY = 'cb_cart';
+
+  function getCart() {
+    try { return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); }
+    catch { return []; }
+  }
+
+  function saveCart(cart) {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  }
+
+  function addToCart(item) {
+    const cart = getCart();
+    const existing = cart.find(i => i.id === item.id);
+    if (existing) existing.qty += 1;
+    else cart.push({ id: item.id, name: item.name, price: item.price, emoji: item.emoji, qty: 1 });
+    saveCart(cart);
+    updateCartUI();
+    updateMenuCardUI(item.id);
+    showToast(`${item.emoji} ${item.name} added!`, 'success');
+    bumpCount();
+  }
+
+  function changeQty(id, delta) {
+    const cart = getCart();
+    const idx = cart.findIndex(i => i.id === id);
+    if (idx === -1) return;
+    cart[idx].qty += delta;
+    if (cart[idx].qty <= 0) cart.splice(idx, 1);
+    saveCart(cart);
+    updateCartUI();
+    updateMenuCardUI(id);
+  }
+
+  function getItemQty(id) {
+    return getCart().find(i => i.id === id)?.qty || 0;
+  }
+
+  function getTotal() {
+    return getCart().reduce((s, i) => s + i.price * i.qty, 0);
+  }
+
+  function getCount() {
+    return getCart().reduce((s, i) => s + i.qty, 0);
+  }
+
+  // ─── MENU RENDER ─────────────────────────────────────
+  let activeFilter = 'all';
+
+  function renderMenu(filter = 'all') {
+    activeFilter = filter;
+    const grid = document.getElementById('menu-grid');
+
+    let items = MENU_DATA;
+    if (filter === 'veg') items = MENU_DATA.filter(i => i.is_veg);
+    else if (filter !== 'all') items = MENU_DATA.filter(i => i.category === filter);
+
+    if (!items.length) {
+      grid.innerHTML = `<div class="empty-state"><div class="emoji">🤷</div><p>Nothing here today.</p></div>`;
+      return;
+    }
+
+    grid.innerHTML = items.map((item, idx) => {
+      const qty = getItemQty(item.id);
+      const unavail = !item.available;
+      return `
+        <div class="menu-card ${unavail ? 'unavailable' : ''}" id="card-${item.id}" style="animation-delay:${idx * 0.05}s">
+          <div class="card-img">${item.emoji}</div>
+          <div class="card-body">
+            <div class="card-top">
+              <span class="card-name">${item.name}</span>
+              <span class="veg-dot ${item.is_veg ? 'veg' : 'nonveg'}"></span>
+            </div>
+            <div class="card-category">${item.category}${unavail ? ' &nbsp;<span class="out-badge">· out of stock</span>' : ''}</div>
+            <div class="card-footer">
+              <div class="price">₹${item.price} <span>/ serving</span></div>
+              ${unavail ? '<span class="out-badge">Unavailable</span>' : renderCardAction(item.id, qty)}
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    document.getElementById('stat-items').textContent = MENU_DATA.filter(i => i.available).length;
+  }
+
+  function renderCardAction(id, qty) {
+    if (qty === 0) {
+      return `<button class="add-btn" onclick="addToCart(getMenuItem('${id}'))">+</button>`;
+    }
+    return `<div class="qty-control">
+      <button onclick="changeQty('${id}', -1)">−</button>
+      <span class="qty-num">${qty}</span>
+      <button onclick="changeQty('${id}', +1)">+</button>
+    </div>`;
+  }
+
+  function updateMenuCardUI(id) {
+    const card = document.getElementById('card-' + id);
+    if (!card) return;
+    const qty = getItemQty(id);
+    const footer = card.querySelector('.card-footer');
+    const item = getMenuItem(id);
+    if (!item || !item.available) return;
+    const priceEl = footer.querySelector('.price');
+    footer.innerHTML = '';
+    if (priceEl) footer.appendChild(priceEl);
+    const actionHTML = renderCardAction(id, qty);
+    footer.insertAdjacentHTML('beforeend', actionHTML);
+  }
+
+  function getMenuItem(id) {
+    return MENU_DATA.find(i => i.id === id);
+  }
+
+  // ─── FILTERS ─────────────────────────────────────────
+  document.getElementById('filters').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderMenu(btn.dataset.filter);
+  });
+
+  // ─── CART UI ─────────────────────────────────────────
+  function updateCartUI() {
+    const cart = getCart();
+    const count = getCount();
+    const total = getTotal();
+
+    document.getElementById('cart-count').textContent = count;
+
+    const list = document.getElementById('cart-items-list');
+    const footer = document.getElementById('cart-footer');
+
+    if (!cart.length) {
+      list.innerHTML = `<div class="cart-empty">
+        <div class="icon">🛒</div>
+        <p>Your cart is empty.<br>Add something delicious!</p>
+      </div>`;
+      footer.style.display = 'none';
+      return;
+    }
+
+    footer.style.display = 'block';
+    document.getElementById('cart-subtotal').textContent = `₹${total}`;
+    document.getElementById('cart-total').textContent = `₹${total}`;
+
+    list.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <div class="cart-item-icon">${item.emoji}</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">₹${item.price} × ${item.qty} = ₹${item.price * item.qty}</div>
+        </div>
+        <div class="cart-item-actions">
+          <button class="ci-btn" onclick="changeQty('${item.id}', -1)">−</button>
+          <span class="ci-qty">${item.qty}</span>
+          <button class="ci-btn" onclick="changeQty('${item.id}', +1)">+</button>
+        </div>
+      </div>`).join('');
+  }
+
+  function toggleCart() {
+    const overlay = document.getElementById('cart-overlay');
+    const drawer  = document.getElementById('cart-drawer');
+    const open    = drawer.classList.contains('open');
+    overlay.classList.toggle('open', !open);
+    drawer.classList.toggle('open', !open);
+    document.body.style.overflow = open ? '' : 'hidden';
+  }
+
+  function bumpCount() {
+    const el = document.getElementById('cart-count');
+    el.classList.remove('bump');
+    void el.offsetWidth;
+    el.classList.add('bump');
+  }
+
+  // ─── ORDER ───────────────────────────────────────────
+  function placeOrder() {
+    const cart = getCart();
+    if (!cart.length) return;
+
+    const orderId = 'CB-' + Date.now().toString(36).toUpperCase();
+    const order = {
+      id: orderId,
+      items: cart,
+      total: getTotal(),
+      status: 'pending',
+      placed_at: new Date().toISOString(),
+    };
+
+    // Save to order history (Phase 2: send to Supabase)
+    const history = JSON.parse(localStorage.getItem('cb_orders') || '[]');
+    history.unshift(order);
+    localStorage.setItem('cb_orders', JSON.stringify(history));
+
+    // Clear cart
+    saveCart([]);
+    updateCartUI();
+
+    // Close cart, show success
+    toggleCart();
+    document.getElementById('order-id-display').textContent = orderId;
+    document.getElementById('success-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    // Refresh card UIs
+    MENU_DATA.forEach(item => updateMenuCardUI(item.id));
+  }
+
+  function closeModal() {
+    document.getElementById('success-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ─── TOAST ───────────────────────────────────────────
+  function showToast(msg, type = '') {
+    const container = document.getElementById('toast-container');
+    const t = document.createElement('div');
+    t.className = 'toast ' + type;
+    t.textContent = msg;
+    container.appendChild(t);
+    setTimeout(() => t.remove(), 2500);
+  }
+
+  // ─── INIT ────────────────────────────────────────────
+  renderMenu('all');
+  updateCartUI();
+</script>
+</body>
+</html>

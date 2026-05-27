@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusBite — Shop</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/shop.css">
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Campus<span>Bite</span></a>
+  <a href="index.html" class="back-btn">← Back Home</a>
+</nav>
+
+<header class="shop-hero">
+  <img id="shop-banner" src="" alt="Shop Banner">
+
+  <div class="shop-info">
+    <p class="shop-label">Silver Oak Food Court</p>
+    <h1 id="shop-name">Shop Name</h1>
+    <p id="shop-desc">Category</p>
+
+    <div class="shop-meta">
+      <span>⭐ 4.8</span>
+      <span>⏱ 10-15 mins</span>
+      <span>🎓 Campus Pickup</span>
+    </div>
+  </div>
+</header>
+
+<section class="menu-section">
+
+  <div class="menu-top">
+    <h2>Popular Items</h2>
+
+    <div class="menu-filters">
+      <button class="active">All</button>
+      <button>Snacks</button>
+      <button>Drinks</button>
+      <button>Combos</button>
+    </div>
+  </div>
+
+  <div class="food-grid" id="food-grid"></div>
+
+</section>
+
+<button class="floating-cart" onclick="goToOrders()">
+  🛒 View Cart <span id="cart-count">0</span>
+</button>
+
+<div id="toast-container"></div>
+
+<script>
+const shops = {
+petpooja: {
+  name: "Pet Pooja",
+  desc: "Puffs • Burgers • Pakoda • Vadapav",
+  banner: "assets/images/petpooja.png",
+
+  foods: [
+    {
+      name: "Masala Puff",
+      price: 25,
+      img: "assets/images/foods/puff.jpeg",
+      rating: "4.8",
+      time: "8 mins"
+    },
+
+    {
+      name: "Veg Burger",
+      price: 45,
+      img: "assets/images/foods/burger.jpeg",
+      rating: "4.7",
+      time: "10 mins"
+    },
+
+    {
+      name: "Pakoda Plate",
+      price: 30,
+      img: "assets/images/foods/Pokada.jpeg",
+      rating: "4.6",
+      time: "7 mins"
+    },
+
+    {
+      name: "Vadapav",
+      price: 25,
+      img: "assets/images/foods/vadapav.jpeg",
+      rating: "4.9",
+      time: "6 mins"
+    }
+  ]
+},
+
+  puffholic: {
+    name: "Puffholic",
+    desc: "Puffs • Rolls • Crispy Snacks",
+    banner: "assets/images/puffoholic.png",
+    foods: [
+      { name: "Cheese Puff", price: 35, img: "assets/images/foods/puff.jpeg", rating: "4.9", time: "8 mins" },
+      { name: "Veg Puff", price: 25, img: "assets/images/foods/puff.jpeg", rating: "4.7", time: "7 mins" },
+      { name: "Paneer Puff", price: 40, img: "assets/images/foods/puff.jpeg", rating: "4.8", time: "9 mins" }
+    ]
+  },
+
+  freshcrush: {
+  name: "Fresh Crush",
+  desc: "Juices • Mocktails • Shakes",
+  banner: "assets/images/freshcrush.jpeg",
+
+  foods: [
+    {
+      name: "Fresh Juice",
+      price: 35,
+      img: "assets/images/foods/juice.jpeg",
+      rating: "4.8",
+      time: "5 mins"
+    },
+
+    {
+      name: "Cold Coffee",
+      price: 60,
+      img: "assets/images/foods/coldcoffe.jpeg",
+      rating: "4.9",
+      time: "7 mins"
+    }
+  ]
+},
+
+dwarka: {
+  name: "Dwarka Dish",
+  desc: "Burgers • Coffee • Frankies",
+  banner: "assets/images/dwarkadish.jpeg",
+
+  foods: [
+    {
+      name: "Cheese Burger",
+      price: 80,
+      img: "assets/images/foods/burger.jpeg",
+      rating: "4.9",
+      time: "12 mins"
+    },
+
+    {
+      name: "Cold Coffee",
+      price: 60,
+      img: "assets/images/foods/coldcoffe.jpeg",
+      rating: "4.8",
+      time: "8 mins"
+    },
+
+    {
+      name: "Veg Frankie",
+      price: 70,
+      img: "assets/images/foods/Frankie.jpeg",
+      rating: "4.7",
+      time: "10 mins"
+    },
+
+    {
+      name: "Peri Peri Fries",
+      price: 55,
+      img: "assets/images/foods/French fries.jpeg",
+      rating: "4.8",
+      time: "9 mins"
+    }
+  ]
+},
+
+ sweetdelights: {
+  name: "Sweet Delights",
+  desc: "Cakes • Pastries • Desserts",
+  banner: "assets/images/sweetdelights.jpeg",
+
+  foods: [
+    {
+      name: "Chocolate Pastry",
+      price: 60,
+      img: "assets/images/foods/cake.jpeg",
+      rating: "4.9",
+      time: "5 mins"
+    }
+  ]
+},
+
+umiya: {
+  name: "Umiya Campus",
+  desc: "Meals • South Indian • Student Food",
+  banner: "assets/images/umiyacampus.jpeg",
+
+  foods: [
+    {
+      name: "Masala Dosa",
+      price: 70,
+      img: "assets/images/foods/dosa.jpeg",
+      rating: "4.8",
+      time: "12 mins"
+    }
+  ]
+},
+};
+
+const params = new URLSearchParams(window.location.search);
+const shopId = params.get("shop") || "petpooja";
+const shop = shops[shopId] || shops.petpooja;
+
+document.getElementById("shop-name").innerText = shop.name;
+document.getElementById("shop-desc").innerText = shop.desc;
+document.getElementById("shop-banner").src = shop.banner;
+
+const foodGrid = document.getElementById("food-grid");
+
+foodGrid.innerHTML = shop.foods.map(food => `
+  <div class="food-card">
+    <div class="food-img">
+      <img src="${food.img}" alt="${food.name}">
+    </div>
+
+    <div class="food-content">
+      <div class="food-top">
+        <h3>${food.name}</h3>
+        <span>⭐ ${food.rating}</span>
+      </div>
+
+      <p>Freshly prepared at ${shop.name}. Perfect for campus cravings.</p>
+
+      <div class="food-bottom">
+        <div>
+          <h4>₹${food.price}</h4>
+          <small>${food.time}</small>
+        </div>
+
+        <button onclick="addToCart('${food.name}', ${food.price})">ADD +</button>
+      </div>
+    </div>
+  </div>
+`).join("");
+
+function getCart(){
+  return JSON.parse(localStorage.getItem("campus_cart")) || [];
+}
+
+function saveCart(cart){
+  localStorage.setItem("campus_cart", JSON.stringify(cart));
+}
+
+function updateCartCount(){
+  const cart = getCart();
+  const count = cart.reduce((sum, item) => sum + item.qty, 0);
+  document.getElementById("cart-count").innerText = count;
+}
+
+function showToast(message){
+  const container = document.getElementById("toast-container");
+  const toast = document.createElement("div");
+
+  toast.className = "toast";
+  toast.innerText = message;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add("hide");
+  }, 2200);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 2800);
+}
+
+function addToCart(name, price){
+  const cart = getCart();
+  const existing = cart.find(item => item.name === name);
+
+  if(existing){
+    existing.qty += 1;
+  }else{
+    cart.push({
+      shop: shop.name,
+      name,
+      price,
+      qty: 1
+    });
+  }
+
+  saveCart(cart);
+  updateCartCount();
+  showToast(`✅ ${name} added to cart`);
+}
+
+function goToOrders(){
+  window.location.href = "orders.html";
+}
+
+updateCartCount();
+</script>
+
+</body>
+</html>
