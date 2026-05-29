@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusBite — Admin Dashboard</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Campus<span>Bite</span></a>
+  <a href="index.html" class="back-btn">← Student View</a>
+</nav>
+
+<section class="admin-page">
+
+  <div class="admin-header">
+    <p>Vendor Control Panel</p>
+    <h1>Admin <span>Dashboard</span></h1>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <p>Total Orders</p>
+      <h2 id="total-orders">0</h2>
+    </div>
+
+    <div class="stat-card">
+      <p>Total Revenue</p>
+      <h2 id="total-revenue">₹0</h2>
+    </div>
+
+    <div class="stat-card">
+      <p>Preparing</p>
+      <h2 id="pending-orders">0</h2>
+    </div>
+
+    <div class="stat-card">
+      <p>Ready Orders</p>
+      <h2 id="ready-orders">0</h2>
+    </div>
+  </div>
+
+  <div class="orders-panel">
+    <div class="panel-top">
+      <h2>Live Orders</h2>
+      <button onclick="seedDemoOrders()">Load Demo Orders</button>
+    </div>
+
+    <div id="admin-orders"></div>
+  </div>
+
+</section>
+
+<script>
+function getOrders(){
+  return JSON.parse(localStorage.getItem("campus_orders")) || [];
+}
+
+function saveOrders(orders){
+  localStorage.setItem("campus_orders", JSON.stringify(orders));
+}
+
+function getOrderTotal(order){
+  return order.items.reduce((sum, item) => sum + item.price * item.qty, 0) + 15;
+}
+
+function renderAdmin(){
+  const orders = getOrders();
+
+  const totalOrders = orders.length;
+  const totalRevenue = orders.reduce((sum, order) => sum + getOrderTotal(order), 0);
+  const pending = orders.filter(order => order.status !== "Ready").length;
+  const ready = orders.filter(order => order.status === "Ready").length;
+
+  document.getElementById("total-orders").innerText = totalOrders;
+  document.getElementById("total-revenue").innerText = "₹" + totalRevenue;
+  document.getElementById("pending-orders").innerText = pending;
+  document.getElementById("ready-orders").innerText = ready;
+
+  const box = document.getElementById("admin-orders");
+
+  if(orders.length === 0){
+    box.innerHTML = `
+      <div class="empty">
+        <h3>No orders yet</h3>
+        <p>Place an order from student side or load demo orders.</p>
+      </div>
+    `;
+    return;
+  }
+
+  box.innerHTML = orders.map((order, index) => `
+    <div class="order-card">
+      <div class="order-info">
+        <p class="order-id">${order.id}</p>
+        <h3>${order.items.map(item => item.name + " × " + item.qty).join(", ")}</h3>
+        <span>${order.date || "Today"} • ₹${getOrderTotal(order)}</span>
+      </div>
+
+      <div class="order-actions">
+        <span class="status ${order.status === "Ready" ? "ready" : ""}">
+          ${order.status || "Preparing"}
+        </span>
+
+        <button onclick="toggleStatus(${index})">
+          ${order.status === "Ready" ? "Mark Preparing" : "Mark Ready"}
+        </button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function toggleStatus(index){
+  const orders = getOrders();
+
+  orders[index].status = orders[index].status === "Ready"
+    ? "Preparing"
+    : "Ready";
+
+  saveOrders(orders);
+  renderAdmin();
+}
+
+function seedDemoOrders(){
+  const demoOrders = [
+    {
+      id: "CB-1001",
+      date: "Today",
+      status: "Preparing",
+      items: [
+        { name: "Cheese Burger", price: 80, qty: 2 },
+        { name: "Cold Coffee", price: 60, qty: 1 }
+      ]
+    },
+    {
+      id: "CB-1002",
+      date: "Today",
+      status: "Ready",
+      items: [
+        { name: "Masala Puff", price: 25, qty: 3 }
+      ]
+    },
+    {
+      id: "CB-1003",
+      date: "Today",
+      status: "Preparing",
+      items: [
+        { name: "Veg Frankie", price: 70, qty: 1 },
+        { name: "Peri Peri Fries", price: 55, qty: 1 }
+      ]
+    }
+  ];
+
+  saveOrders(demoOrders);
+  renderAdmin();
+}
+
+renderAdmin();
+</script>
+
+</body>
+</html>
