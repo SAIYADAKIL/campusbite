@@ -96,7 +96,7 @@ body::before {
       rgba(0,0,0,0.25) 60%,
       rgba(0,0,0,0.08) 100%
     ),
-    url("/campusbite/Campus\ bite/assets/images/image.png");
+     url("../assets/images/image.png");
 
   background-size:cover;
   background-position:center;
